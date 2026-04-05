@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK Mosque — Volunteer Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080f0f;
+    --surface: #0f1a1a;
+    --card: #122020;
+    --border: #1e3030;
+    --em: #10b981;
+    --em-light: #34d399;
+    --em-dim: rgba(16,185,129,0.10);
+    --em-glow: rgba(16,185,129,0.18);
+    --gold: #d4a84b;
+    --text: #e8f5f0;
+    --muted: #6b9080;
+    --red: #f87171;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Lock Screen */
+  #lockScreen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .lock-moon { font-size: 52px; margin-bottom: 16px; filter: drop-shadow(0 0 16px rgba(16,185,129,0.4)); }
+  .lock-bismillah { font-family: 'Amiri', serif; font-size: 16px; color: var(--gold); margin-bottom: 10px; opacity: 0.8; }
+  .lock-title { font-family: 'Amiri', serif; font-size: 30px; color: var(--text); margin-bottom: 4px; }
+  .lock-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .lock-hint {
+    display: inline-block;
+    background: var(--em-dim);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--em);
+    margin-bottom: 28px;
+  }
+  .lock-input {
+    width: 100%;
+    max-width: 300px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    padding: 16px;
+    text-align: center;
+    letter-spacing: 10px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: block;
+  }
+  .lock-input:focus { outline: none; border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
+  .lock-btn {
+    width: 100%;
+    max-width: 300px;
+    background: var(--em);
+    color: #040d0d;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: block;
+  }
+  .lock-btn:hover { background: var(--em-light); }
+  .lock-error { margin-top: 14px; font-size: 13px; color: var(--red); display: none; }
+  .back-link { margin-top: 20px; font-size: 13px; color: var(--muted); text-decoration: none; }
+  .back-link:hover { color: var(--em); }
+
+  /* Main App */
+  #mainApp { display: none; position: relative; z-index: 1; }
+
+  .header {
+    padding: 28px 20px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a1a1a 0%, transparent 100%);
+  }
+  .header-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--em); margin-bottom: 6px; }
+  .header h1 { font-family: 'Amiri', serif; font-size: 26px; color: var(--text); }
+  .header h1 span { color: var(--em-light); }
+  .header-back { display: inline-block; font-size: 12px; color: var(--muted); text-decoration: none; margin-top: 8px; }
+  .header-back:hover { color: var(--em); }
+
+  .tabs {
+    display: flex;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .tab-btn {
+    flex: 1; padding: 14px 10px;
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .tab-btn.active { color: var(--em); border-bottom-color: var(--em); }
+
+  .tab-content { display: none; max-width: 480px; margin: 0 auto; padding: 24px 20px; }
+  .tab-content.active { display: block; }
+
+  .info-box {
+    background: var(--em-dim);
+    border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 10px;
+    padding: 14px; font-size: 13px;
+    color: var(--muted); margin-bottom: 22px; line-height: 1.6;
+  }
+  .info-box strong { color: var(--em-light); display: block; margin-bottom: 2px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+  .form-input, .form-select {
+    width: 100%; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px; padding: 13px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-input:focus, .form-select:focus { outline: none; border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2310b981' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; cursor: pointer;
+  }
+  .form-select option { background: #0f1a1a; }
+
+  .section-divider { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--em); margin: 22px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+
+  .prayer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .prayer-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .prayer-field input {
+    width: 100%; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px; padding: 12px 13px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .prayer-field input:focus { outline: none; border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
+  .prayer-field.full { grid-column: 1 / -1; }
+
+  .mosque-loaded {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+    margin-bottom: 18px; font-size: 13px;
+    display: none; align-items: center; gap: 10px;
+  }
+  .mosque-loaded-name { font-size: 15px; font-weight: 600; color: var(--em-light); }
+  .mosque-loaded-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .submit-btn {
+    width: 100%; background: var(--em); color: #040d0d;
+    border: none; border-radius: var(--radius);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px; font-weight: 700; padding: 15px;
+    cursor: pointer; margin-top: 8px; transition: background 0.2s;
+  }
+  .submit-btn:hover { background: var(--em-light); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--em); color: #040d0d;
+    font-weight: 700; font-size: 14px;
+    padding: 13px 26px; border-radius: 40px;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999; white-space: nowrap;
+    box-shadow: 0 4px 24px rgba(16,185,129,0.3);
+  }
+  .toast.error { background: var(--red); color: #fff; box-shadow: 0 4px 24px rgba(248,113,113,0.3); }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="lockScreen">
+  <div class="lock-moon">🌙</div>
+  <div class="lock-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="lock-title">Volunteer Portal</div>
+  <div class="lock-sub">SK Mosque Prayer Times</div>
+  <div class="lock-hint">🔑 Access code: 99</div>
+  <input class="lock-input" type="password" id="codeInput" maxlength="6" placeholder="••" inputmode="numeric">
+  <button class="lock-btn" onclick="checkCode()">Enter Portal</button>
+  <div class="lock-error" id="lockError">❌ Incorrect code. Try again.</div>
+  <a href="index.html" class="back-link">← Back to prayer times</a>
+</div>
+
+<div id="mainApp">
+  <div class="header">
+    <div class="header-label">Volunteer Portal</div>
+    <h1>SK Mosque <span>Admin</span></h1>
+    <a href="index.html" class="header-back">← Back to public site</a>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('update')">🕐 Update Times</button>
+    <button class="tab-btn" onclick="switchTab('add')">🕌 Add Mosque</button>
+  </div>
+
+  <div class="tab-content active" id="tab-update">
+    <div class="info-box">
+      <strong>How to update prayer times</strong>
+      Pick your mosque → edit times → tap Save. Website updates within 1 minute. ✅
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Select Your Mosque</label>
+      <select class="form-select" id="updateMosqueSelect" onchange="mosqueSelected()">
+        <option value="">— Select mosque —</option>
+      </select>
+    </div>
+
+    <div class="mosque-loaded" id="mosqueLoaded">
+      <div>
+        <div class="mosque-loaded-name" id="loadedName"></div>
+        <div class="mosque-loaded-sub" id="loadedSub"></div>
+      </div>
+    </div>
+
+    <div class="section-divider">Daily Prayer Times</div>
+    <div class="prayer-grid">
+      <div class="prayer-field"><label>Fajr</label><input type="text" id="u_fajr" placeholder="5:20 AM"></div>
+      <div class="prayer-field"><label>Dhuhr</label><input type="text" id="u_dhuhr" placeholder="1:15 PM"></div>
+      <div class="prayer-field"><label>Asr</label><input type="text" id="u_asr" placeholder="5:20 PM"></div>
+      <div class="prayer-field"><label>Maghrib</label><input type="text" id="u_maghrib" placeholder="7:30 PM"></div>
+      <div class="prayer-field full"><label>Isha</label><input type="text" id="u_isha" placeholder="9:30 PM"></div>
+    </div>
+
+    <div class="section-divider">Jumu'ah — Friday Prayer</div>
+    <div class="prayer-grid">
+      <div class="prayer-field full"><label>Jumu'ah Time</label><input type="text" id="u_jumma" placeholder="e.g. 1:30 PM"></div>
+    </div>
+
+    <button class="submit-btn" onclick="updateTimes()">✅ Save Prayer Times</button>
+  </div>
+
+  <div class="tab-content" id="tab-add">
+    <div class="info-box">
+      <strong>Adding a new mosque</strong>
+      Fill in details below. Prayer times can be added later through the Update Times tab.
+    </div>
+
+    <div class="section-divider">Mosque Information</div>
+    <div class="form-group">
+      <label class="form-label">Mosque Name</label>
+      <input type="text" class="form-input" id="a_name" placeholder="e.g. Regina Islamic Association">
+    </div>
+    <div class="form-group">
+      <label class="form-label">City</label>
+      <input type="text" class="form-input" id="a_city" placeholder="e.g. Regina">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Address</label>
+      <input type="text" class="form-input" id="a_address" placeholder="e.g. 4370 Parliament Ave">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Door Entry Code</label>
+      <input type="text" class="form-input" id="a_door" placeholder="e.g. 1212" inputmode="numeric">
+    </div>
+    <button class="submit-btn" onclick="addMosque()">🕌 Add Mosque</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ACCESS_CODE = '99';
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSj8IV0YzG5jUnGKOdPs4lPPFpZq3w4I8WISNnsDl0iEAnMBe5qRB_JaGj5I90TZIOh_c5TtrTQccWN/pub?gid=2040643207&single=true&output=csv';
+
+document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
+
+function checkCode() {
+  if (document.getElementById('codeInput').value.trim() === ACCESS_CODE) {
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    loadMosques();
+  } else {
+    document.getElementById('lockError').style.display = 'block';
+    document.getElementById('codeInput').value = '';
+  }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&tab==='update')||(i===1&&tab==='add')));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+let mosqueData = [];
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim().toLowerCase().replace(/\s+/g,'_'));
+  return lines.slice(1).map(line => {
+    const cols=[]; let cur='', inQ=false;
+    for(const ch of line){
+      if(ch==='"'){inQ=!inQ;continue;}
+      if(ch===','&&!inQ){cols.push(cur.trim());cur='';continue;}
+      cur+=ch;
+    }
+    cols.push(cur.trim());
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=cols[i]||'');
+    return obj;
+  });
+}
+
+async function loadMosques() {
+  try {
+    const res = await fetch(CSV_URL+'&t='+Date.now());
+    mosqueData = parseCSV(await res.text());
+    const sel = document.getElementById('updateMosqueSelect');
+    sel.innerHTML = '<option value="">— Select your mosque —</option>' +
+      mosqueData.map((r,i)=>`<option value="${i}">${r.mosque_name||r.name} — ${r.city}</option>`).join('');
+  } catch(e){ showToast('Could not load mosques',true); }
+}
+
+function mosqueSelected() {
+  const idx = document.getElementById('updateMosqueSelect').value;
+  const loaded = document.getElementById('mosqueLoaded');
+  if(!idx){loaded.style.display='none';return;}
+  const r = mosqueData[parseInt(idx)];
+  document.getElementById('loadedName').textContent = r.mosque_name||r.name;
+  document.getElementById('loadedSub').textContent = `${r.city} · ${r.address}`;
+  document.getElementById('u_fajr').value    = r.fajr||'';
+  document.getElementById('u_dhuhr').value   = r.dhuhr||'';
+  document.getElementById('u_asr').value     = r.asr||'';
+  document.getElementById('u_maghrib').value = r.maghrib||'';
+  document.getElementById('u_isha').value    = r.isha||'';
+  document.getElementById('u_jumma').value   = r.jumma||r.jummah||r.jumuah||'';
+  loaded.style.display='flex';
+}
+
+async function updateTimes() {
+  const idx = document.getElementById('updateMosqueSelect').value;
+  if(!idx){showToast('Please select a mosque first',true);return;}
+  const r = mosqueData[parseInt(idx)];
+  const data = {
+    action:'update', mosque: r.mosque_name||r.name,
+    fajr:    document.getElementById('u_fajr').value.trim(),
+    dhuhr:   document.getElementById('u_dhuhr').value.trim(),
+    asr:     document.getElementById('u_asr').value.trim(),
+    maghrib: document.getElementById('u_maghrib').value.trim(),
+    isha:    document.getElementById('u_isha').value.trim(),
+    jumma:   document.getElementById('u_jumma').value.trim(),
+  };
+  if(!data.fajr||!data.dhuhr||!data.asr||!data.maghrib||!data.isha){showToast('Please fill in all prayer times',true);return;}
+  const btn = document.querySelector('#tab-update .submit-btn');
+  btn.disabled=true; btn.textContent='Saving...';
+  try {
+    await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(data)});
+    showToast('✅ Prayer times saved!');
+    setTimeout(loadMosques,2000);
+  } catch(e){showToast('Error saving. Try again.',true);}
+  btn.disabled=false; btn.textContent='✅ Save Prayer Times';
+}
+
+async function addMosque() {
+  const name=document.getElementById('a_name').value.trim();
+  const city=document.getElementById('a_city').value.trim();
+  const address=document.getElementById('a_address').value.trim();
+  const door=document.getElementById('a_door').value.trim();
+  if(!name||!city||!address||!door){showToast('Please fill in all fields',true);return;}
+  const btn=document.querySelector('#tab-add .submit-btn');
+  btn.disabled=true; btn.textContent='Adding...';
+  try {
+    await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'add',mosque:name,city,address,door})});
+    showToast('🕌 Mosque added!');
+    ['a_name','a_city','a_address','a_door'].forEach(id=>document.getElementById(id).value='');
+    setTimeout(loadMosques,2000);
+  } catch(e){showToast('Error adding. Try again.',true);}
+  btn.disabled=false; btn.textContent='🕌 Add Mosque';
+}
+
+function showToast(msg,isError=false) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(isError?' error':'');
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>
