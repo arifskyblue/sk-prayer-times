@@ -182,6 +182,79 @@
     margin-bottom: 18px; font-size: 13px;
     display: none; align-items: center; gap: 10px;
   }
+
+  /* Time Picker */
+  .time-picker {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .time-picker:focus-within {
+    border-color: var(--em);
+    box-shadow: 0 0 0 3px var(--em-glow);
+  }
+  .time-spin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .spin-val {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    width: 42px;
+    text-align: center;
+    padding: 4px 0;
+    cursor: default;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .spin-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--em);
+    font-size: 12px;
+    width: 42px;
+    padding: 2px 0;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s;
+    line-height: 1;
+  }
+  .spin-btn:hover { background: var(--em-dim); }
+  .time-colon {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--muted);
+    padding: 0 2px;
+    margin-top: -2px;
+  }
+  .ampm-select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--em-light);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 4px;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  .ampm-select:focus { outline: none; border-color: var(--em); }
+  .ampm-select option { background: #0f1a1a; }
+  .prayer-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
   .mosque-loaded-name { font-size: 15px; font-weight: 600; color: var(--em-light); }
   .mosque-loaded-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
 
@@ -256,19 +329,171 @@
     </div>
 
     <div class="section-divider">Daily Prayer Times</div>
-    <div class="prayer-grid">
-      <div class="prayer-field"><label>Fajr</label><input type="text" id="u_fajr" placeholder="5:20 AM"></div>
-      <div class="prayer-field"><label>Dhuhr</label><input type="text" id="u_dhuhr" placeholder="1:15 PM"></div>
-      <div class="prayer-field"><label>Asr</label><input type="text" id="u_asr" placeholder="5:20 PM"></div>
-      <div class="prayer-field"><label>Maghrib</label><input type="text" id="u_maghrib" placeholder="7:30 PM"></div>
-      <div class="prayer-field full"><label>Isha</label><input type="text" id="u_isha" placeholder="9:30 PM"></div>
+    <div class="prayer-grid" style="grid-template-columns:1fr">
+      <div class="prayer-field full">
+        <label>Fajr</label>
+        <div class="time-picker" id="picker_u_fajr">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_fajr','hr',1)">▲</button>
+            <div class="spin-val" id="u_fajr_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_fajr','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_fajr','mn',1)">▲</button>
+            <div class="spin-val" id="u_fajr_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_fajr','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_fajr_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="prayer-field full">
+        <label>Dhuhr</label>
+        <div class="time-picker" id="picker_u_dhuhr">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_dhuhr','hr',1)">▲</button>
+            <div class="spin-val" id="u_dhuhr_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_dhuhr','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_dhuhr','mn',1)">▲</button>
+            <div class="spin-val" id="u_dhuhr_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_dhuhr','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_dhuhr_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="prayer-field full">
+        <label>Asr</label>
+        <div class="time-picker" id="picker_u_asr">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_asr','hr',1)">▲</button>
+            <div class="spin-val" id="u_asr_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_asr','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_asr','mn',1)">▲</button>
+            <div class="spin-val" id="u_asr_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_asr','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_asr_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="prayer-field full">
+        <label>Maghrib</label>
+        <div class="time-picker" id="picker_u_maghrib">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_maghrib','hr',1)">▲</button>
+            <div class="spin-val" id="u_maghrib_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_maghrib','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_maghrib','mn',1)">▲</button>
+            <div class="spin-val" id="u_maghrib_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_maghrib','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_maghrib_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="prayer-field full">
+        <label>Isha</label>
+        <div class="time-picker" id="picker_u_isha">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_isha','hr',1)">▲</button>
+            <div class="spin-val" id="u_isha_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_isha','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_isha','mn',1)">▲</button>
+            <div class="spin-val" id="u_isha_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_isha','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_isha_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <div class="section-divider">Jumu'ah — Friday Prayer</div>
-    <div class="prayer-grid">
-      <div class="prayer-field full"><label>Jumu'ah 1st</label><input type="text" id="u_jumma1" placeholder="e.g. 12:00 PM"></div>
-      <div class="prayer-field full"><label>Jumu'ah 2nd</label><input type="text" id="u_jumma2" placeholder="e.g. 1:00 PM"></div>
-      <div class="prayer-field full"><label>Jumu'ah 3rd</label><input type="text" id="u_jumma3" placeholder="e.g. 2:00 PM"></div>
+    <div class="prayer-grid" style="grid-template-columns:1fr">
+      <div class="prayer-field full">
+        <label>Jumu'ah 1st</label>
+        <div class="time-picker" id="picker_u_jumma1">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_jumma1','hr',1)">▲</button>
+            <div class="spin-val" id="u_jumma1_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_jumma1','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_jumma1','mn',1)">▲</button>
+            <div class="spin-val" id="u_jumma1_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_jumma1','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_jumma1_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="prayer-field full">
+        <label>Jumu'ah 2nd</label>
+        <div class="time-picker" id="picker_u_jumma2">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_jumma2','hr',1)">▲</button>
+            <div class="spin-val" id="u_jumma2_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_jumma2','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_jumma2','mn',1)">▲</button>
+            <div class="spin-val" id="u_jumma2_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_jumma2','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_jumma2_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="prayer-field full">
+        <label>Jumu'ah 3rd</label>
+        <div class="time-picker" id="picker_u_jumma3">
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_jumma3','hr',1)">▲</button>
+            <div class="spin-val" id="u_jumma3_hr">12</div>
+            <button class="spin-btn" onclick="spinTime('u_jumma3','hr',-1)">▼</button>
+          </div>
+          <div class="time-colon">:</div>
+          <div class="time-spin">
+            <button class="spin-btn" onclick="spinTime('u_jumma3','mn',1)">▲</button>
+            <div class="spin-val" id="u_jumma3_mn">00</div>
+            <button class="spin-btn" onclick="spinTime('u_jumma3','mn',-1)">▼</button>
+          </div>
+          <select class="ampm-select" id="u_jumma3_ap">
+            <option>AM</option>
+            <option>PM</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <button class="submit-btn" onclick="updateTimes()">✅ Save Prayer Times</button>
@@ -362,14 +587,14 @@ function mosqueSelected() {
   const r = mosqueData[parseInt(idx)];
   document.getElementById('loadedName').textContent = r.mosque_name||r.name;
   document.getElementById('loadedSub').textContent = `${r.city} · ${r.address}`;
-  document.getElementById('u_fajr').value    = r.fajr||'';
-  document.getElementById('u_dhuhr').value   = r.dhuhr||'';
-  document.getElementById('u_asr').value     = r.asr||'';
-  document.getElementById('u_maghrib').value = r.maghrib||'';
-  document.getElementById('u_isha').value    = r.isha||'';
-  document.getElementById('u_jumma1').value  = r.jumma1||r.jumma||r.jummah||'';
-  document.getElementById('u_jumma2').value  = r.jumma2||'';
-  document.getElementById('u_jumma3').value  = r.jumma3||'';
+  setTimePicker('u_fajr',    r.fajr||'');
+  setTimePicker('u_dhuhr',   r.dhuhr||'');
+  setTimePicker('u_asr',     r.asr||'');
+  setTimePicker('u_maghrib', r.maghrib||'');
+  setTimePicker('u_isha',    r.isha||'');
+  setTimePicker('u_jumma1',  r.jumma1||r.jumma||r.jummah||'');
+  setTimePicker('u_jumma2',  r.jumma2||'');
+  setTimePicker('u_jumma3',  r.jumma3||'');
   loaded.style.display='flex';
 }
 
@@ -379,16 +604,15 @@ async function updateTimes() {
   const r = mosqueData[parseInt(idx)];
   const data = {
     action:'update', mosque: r.mosque_name||r.name,
-    fajr:    document.getElementById('u_fajr').value.trim(),
-    dhuhr:   document.getElementById('u_dhuhr').value.trim(),
-    asr:     document.getElementById('u_asr').value.trim(),
-    maghrib: document.getElementById('u_maghrib').value.trim(),
-    isha:    document.getElementById('u_isha').value.trim(),
-    jumma1:  document.getElementById('u_jumma1').value.trim(),
-    jumma2:  document.getElementById('u_jumma2').value.trim(),
-    jumma3:  document.getElementById('u_jumma3').value.trim(),
+    fajr:    getTimePicker('u_fajr'),
+    dhuhr:   getTimePicker('u_dhuhr'),
+    asr:     getTimePicker('u_asr'),
+    maghrib: getTimePicker('u_maghrib'),
+    isha:    getTimePicker('u_isha'),
+    jumma1:  getTimePicker('u_jumma1'),
+    jumma2:  getTimePicker('u_jumma2'),
+    jumma3:  getTimePicker('u_jumma3'),
   };
-  if(!data.fajr||!data.dhuhr||!data.asr||!data.maghrib||!data.isha){showToast('Please fill in all prayer times',true);return;}
   const btn = document.querySelector('#tab-update .submit-btn');
   btn.disabled=true; btn.textContent='Saving...';
   try {
@@ -401,6 +625,42 @@ async function updateTimes() {
 
 function normalize(str) {
   return (str||'').toLowerCase().replace(/[\s\.\-\_]/g,'');
+}
+
+// ── Time Picker Helpers ──
+function spinTime(id, part, dir) {
+  if (part === 'hr') {
+    const el = document.getElementById(id+'_hr');
+    let v = parseInt(el.textContent);
+    v += dir;
+    if (v > 12) v = 1;
+    if (v < 1) v = 12;
+    el.textContent = v;
+  } else {
+    const el = document.getElementById(id+'_mn');
+    let v = parseInt(el.textContent);
+    v += dir * 5;
+    if (v >= 60) v = 0;
+    if (v < 0) v = 55;
+    el.textContent = String(v).padStart(2,'0');
+  }
+}
+
+function setTimePicker(id, timeStr) {
+  if (!timeStr || timeStr === '—') return;
+  const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!m) return;
+  document.getElementById(id+'_hr').textContent = parseInt(m[1]);
+  document.getElementById(id+'_mn').textContent = String(parseInt(m[2])).padStart(2,'0');
+  const ap = document.getElementById(id+'_ap');
+  ap.value = m[3].toUpperCase();
+}
+
+function getTimePicker(id) {
+  const hr = document.getElementById(id+'_hr').textContent;
+  const mn = document.getElementById(id+'_mn').textContent;
+  const ap = document.getElementById(id+'_ap').value;
+  return hr + ':' + mn + ' ' + ap;
 }
 
 async function addMosque() {
