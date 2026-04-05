@@ -4,286 +4,111 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SK Mosque — Volunteer Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080f0f;
-    --surface: #0f1a1a;
-    --card: #122020;
-    --border: #1e3030;
-    --em: #10b981;
-    --em-light: #34d399;
-    --em-dim: rgba(16,185,129,0.10);
-    --em-glow: rgba(16,185,129,0.18);
-    --gold: #d4a84b;
-    --text: #e8f5f0;
-    --muted: #6b9080;
-    --red: #f87171;
-    --radius: 14px;
+    --bg: #080f0f; --surface: #0f1a1a; --card: #122020; --border: #1e3030;
+    --em: #10b981; --em-light: #34d399; --em-dim: rgba(16,185,129,0.10);
+    --em-glow: rgba(16,185,129,0.18); --gold: #d4a84b; --gold-dim: rgba(212,168,75,0.12);
+    --text: #e8f5f0; --muted: #6b9080; --red: #f87171; --radius: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    min-height: 100vh;
-    padding-bottom: 60px;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.05) 0%, transparent 60%);
-    pointer-events: none;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; padding-bottom: 60px; }
+  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(16,185,129,0.05) 0%, transparent 60%); pointer-events: none; }
 
-  /* Lock Screen */
-  #lockScreen {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 24px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
+  /* Lock */
+  #lockScreen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; text-align: center; position: relative; z-index: 1; }
   .lock-moon { font-size: 52px; margin-bottom: 16px; filter: drop-shadow(0 0 16px rgba(16,185,129,0.4)); }
   .lock-bismillah { font-family: 'Amiri', serif; font-size: 16px; color: var(--gold); margin-bottom: 10px; opacity: 0.8; }
   .lock-title { font-family: 'Amiri', serif; font-size: 30px; color: var(--text); margin-bottom: 4px; }
   .lock-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-  .lock-hint {
-    display: inline-block;
-    background: var(--em-dim);
-    border: 1px solid rgba(16,185,129,0.2);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px;
-    color: var(--em);
-    margin-bottom: 28px;
-  }
-  .lock-input {
-    width: 100%;
-    max-width: 300px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 32px;
-    padding: 16px;
-    text-align: center;
-    letter-spacing: 10px;
-    margin-bottom: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    display: block;
-  }
+  .lock-hint { display: inline-block; background: var(--em-dim); border: 1px solid rgba(16,185,129,0.2); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--em); margin-bottom: 28px; }
+  .lock-input { width: 100%; max-width: 300px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; padding: 16px; text-align: center; letter-spacing: 10px; margin-bottom: 14px; display: block; transition: border-color 0.2s, box-shadow 0.2s; }
   .lock-input:focus { outline: none; border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
-  .lock-btn {
-    width: 100%;
-    max-width: 300px;
-    background: var(--em);
-    color: #040d0d;
-    border: none;
-    border-radius: var(--radius);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 15px;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: block;
-  }
+  .lock-btn { width: 100%; max-width: 300px; background: var(--em); color: #040d0d; border: none; border-radius: var(--radius); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 15px; cursor: pointer; display: block; transition: background 0.2s; }
   .lock-btn:hover { background: var(--em-light); }
   .lock-error { margin-top: 14px; font-size: 13px; color: var(--red); display: none; }
   .back-link { margin-top: 20px; font-size: 13px; color: var(--muted); text-decoration: none; }
   .back-link:hover { color: var(--em); }
 
-  /* Main App */
+  /* App */
   #mainApp { display: none; position: relative; z-index: 1; }
-
-  .header {
-    padding: 28px 20px 20px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, #0a1a1a 0%, transparent 100%);
-  }
+  .header { padding: 28px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #0a1a1a 0%, transparent 100%); }
   .header-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--em); margin-bottom: 6px; }
   .header h1 { font-family: 'Amiri', serif; font-size: 26px; color: var(--text); }
   .header h1 span { color: var(--em-light); }
   .header-back { display: inline-block; font-size: 12px; color: var(--muted); text-decoration: none; margin-top: 8px; }
   .header-back:hover { color: var(--em); }
 
-  .tabs {
-    display: flex;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  .tab-btn {
-    flex: 1; padding: 14px 10px;
-    background: none; border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--muted);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
-  }
+  /* Tabs */
+  .tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); max-width: 480px; margin: 0 auto; }
+  .tab-btn { flex: 1; padding: 14px 10px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
   .tab-btn.active { color: var(--em); border-bottom-color: var(--em); }
 
   .tab-content { display: none; max-width: 480px; margin: 0 auto; padding: 24px 20px; }
   .tab-content.active { display: block; }
 
-  .info-box {
-    background: var(--em-dim);
-    border: 1px solid rgba(16,185,129,0.15);
-    border-radius: 10px;
-    padding: 14px; font-size: 13px;
-    color: var(--muted); margin-bottom: 22px; line-height: 1.6;
-  }
+  /* Info box */
+  .info-box { background: var(--em-dim); border: 1px solid rgba(16,185,129,0.15); border-radius: 10px; padding: 14px; font-size: 13px; color: var(--muted); margin-bottom: 22px; line-height: 1.6; }
   .info-box strong { color: var(--em-light); display: block; margin-bottom: 2px; }
 
+  /* Form */
   .form-group { margin-bottom: 16px; }
   .form-label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
-  .form-input, .form-select {
-    width: 100%; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 16px; padding: 13px 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
+  .form-input, .form-select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; padding: 13px 14px; transition: border-color 0.2s, box-shadow 0.2s; }
   .form-input:focus, .form-select:focus { outline: none; border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
-  .form-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2310b981' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 14px center; cursor: pointer;
-  }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2310b981' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; cursor: pointer; padding-right: 40px; }
   .form-select option { background: #0f1a1a; }
 
   .section-divider { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--em); margin: 22px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
-  .prayer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .prayer-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .prayer-field input {
-    width: 100%; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px; padding: 12px 13px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .prayer-field input:focus { outline: none; border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
-  .prayer-field.full { grid-column: 1 / -1; }
-
-  .mosque-loaded {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 14px;
-    margin-bottom: 18px; font-size: 13px;
-    display: none; align-items: center; gap: 10px;
-  }
-
-  /* Time Picker */
-  .time-picker {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 8px 10px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .time-picker:focus-within {
-    border-color: var(--em);
-    box-shadow: 0 0 0 3px var(--em-glow);
-  }
-  .time-spin {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-  .spin-val {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    width: 42px;
-    text-align: center;
-    padding: 4px 0;
-    cursor: default;
-    user-select: none;
-    font-variant-numeric: tabular-nums;
-  }
-  .spin-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--em);
-    font-size: 12px;
-    width: 42px;
-    padding: 2px 0;
-    cursor: pointer;
-    text-align: center;
-    transition: background 0.15s;
-    line-height: 1;
-  }
-  .spin-btn:hover { background: var(--em-dim); }
-  .time-colon {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--muted);
-    padding: 0 2px;
-    margin-top: -2px;
-  }
-  .ampm-select {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--em-light);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 4px;
-    cursor: pointer;
-    margin-left: 4px;
-  }
-  .ampm-select:focus { outline: none; border-color: var(--em); }
-  .ampm-select option { background: #0f1a1a; }
-  .prayer-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  /* Mosque loaded */
+  .mosque-loaded { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; display: none; align-items: center; gap: 10px; }
   .mosque-loaded-name { font-size: 15px; font-weight: 600; color: var(--em-light); }
   .mosque-loaded-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
 
-  .submit-btn {
-    width: 100%; background: var(--em); color: #040d0d;
-    border: none; border-radius: var(--radius);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 16px; font-weight: 700; padding: 15px;
-    cursor: pointer; margin-top: 8px; transition: background 0.2s;
-  }
+  /* Prayer field */
+  .prayer-field { margin-bottom: 14px; }
+  .prayer-field label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+
+  /* Time picker */
+  .time-picker { display: flex; align-items: center; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; transition: border-color 0.2s, box-shadow 0.2s; }
+  .time-picker:focus-within { border-color: var(--em); box-shadow: 0 0 0 3px var(--em-glow); }
+  .time-spin { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .spin-val { background: var(--card); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; width: 46px; text-align: center; padding: 4px 0; user-select: none; font-variant-numeric: tabular-nums; }
+  .spin-btn { background: var(--card); border: 1px solid var(--border); border-radius: 5px; color: var(--em); font-size: 11px; width: 46px; padding: 3px 0; cursor: pointer; text-align: center; transition: background 0.15s; line-height: 1; }
+  .spin-btn:hover { background: var(--em-dim); }
+  .time-colon { font-size: 24px; font-weight: 700; color: var(--muted); padding: 0 2px; }
+  .ampm-sel { background: var(--card); border: 1px solid var(--border); border-radius: 6px; color: var(--em-light); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; padding: 8px 6px; cursor: pointer; margin-left: 6px; }
+  .ampm-sel:focus { outline: none; border-color: var(--em); }
+  .ampm-sel option { background: #0f1a1a; }
+
+  /* Auto badge */
+  .auto-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--gold-dim); border: 1px solid rgba(212,168,75,0.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--gold); margin-bottom: 8px; }
+
+  /* Jumu'ah slot */
+  .jumma-slot { margin-bottom: 14px; }
+  .jumma-slot label { display: block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+  .jumma-row { display: flex; gap: 10px; align-items: flex-start; }
+  .jumma-toggle { flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; padding: 10px 12px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2310b981' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; transition: border-color 0.2s; }
+  .jumma-toggle:focus { outline: none; border-color: var(--em); }
+  .jumma-toggle option { background: #0f1a1a; }
+  .jumma-picker { flex: 1; }
+
+  /* Submit */
+  .submit-btn { width: 100%; background: var(--em); color: #040d0d; border: none; border-radius: var(--radius); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; padding: 15px; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
   .submit-btn:hover { background: var(--em-light); }
   .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .toast {
-    position: fixed; bottom: 28px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--em); color: #040d0d;
-    font-weight: 700; font-size: 14px;
-    padding: 13px 26px; border-radius: 40px;
-    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
-    z-index: 999; white-space: nowrap;
-    box-shadow: 0 4px 24px rgba(16,185,129,0.3);
-  }
-  .toast.error { background: var(--red); color: #fff; box-shadow: 0 4px 24px rgba(248,113,113,0.3); }
+  /* Toast */
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--em); color: #040d0d; font-weight: 700; font-size: 14px; padding: 13px 26px; border-radius: 40px; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); z-index: 999; white-space: nowrap; box-shadow: 0 4px 24px rgba(16,185,129,0.3); }
+  .toast.error { background: var(--red); color: #fff; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
+<!-- Lock Screen -->
 <div id="lockScreen">
   <div class="lock-moon">🌙</div>
   <div class="lock-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
@@ -296,6 +121,7 @@
   <a href="index.html" class="back-link">← Back to prayer times</a>
 </div>
 
+<!-- Main App -->
 <div id="mainApp">
   <div class="header">
     <div class="header-label">Volunteer Portal</div>
@@ -308,10 +134,11 @@
     <button class="tab-btn" onclick="switchTab('add')">🕌 Add Mosque</button>
   </div>
 
+  <!-- UPDATE TAB -->
   <div class="tab-content active" id="tab-update">
     <div class="info-box">
       <strong>How to update prayer times</strong>
-      Pick your mosque → edit times → tap Save. Website updates within 1 minute. ✅
+      Select your mosque → adjust times → tap Save. Maghrib auto-fills from today's sunset. ✅
     </div>
 
     <div class="form-group">
@@ -329,182 +156,79 @@
     </div>
 
     <div class="section-divider">Daily Prayer Times</div>
-    <div class="prayer-grid" style="grid-template-columns:1fr">
-      <div class="prayer-field full">
-        <label>Fajr</label>
-        <div class="time-picker" id="picker_u_fajr">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_fajr','hr',1)">▲</button>
-            <div class="spin-val" id="u_fajr_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_fajr','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_fajr','mn',1)">▲</button>
-            <div class="spin-val" id="u_fajr_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_fajr','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_fajr_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
-      </div>
-      <div class="prayer-field full">
-        <label>Dhuhr</label>
-        <div class="time-picker" id="picker_u_dhuhr">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_dhuhr','hr',1)">▲</button>
-            <div class="spin-val" id="u_dhuhr_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_dhuhr','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_dhuhr','mn',1)">▲</button>
-            <div class="spin-val" id="u_dhuhr_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_dhuhr','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_dhuhr_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
-      </div>
-      <div class="prayer-field full">
-        <label>Asr</label>
-        <div class="time-picker" id="picker_u_asr">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_asr','hr',1)">▲</button>
-            <div class="spin-val" id="u_asr_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_asr','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_asr','mn',1)">▲</button>
-            <div class="spin-val" id="u_asr_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_asr','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_asr_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
-      </div>
-      <div class="prayer-field full">
-        <label>Maghrib</label>
-        <div class="time-picker" id="picker_u_maghrib">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_maghrib','hr',1)">▲</button>
-            <div class="spin-val" id="u_maghrib_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_maghrib','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_maghrib','mn',1)">▲</button>
-            <div class="spin-val" id="u_maghrib_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_maghrib','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_maghrib_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
-      </div>
-      <div class="prayer-field full">
-        <label>Isha</label>
-        <div class="time-picker" id="picker_u_isha">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_isha','hr',1)">▲</button>
-            <div class="spin-val" id="u_isha_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_isha','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_isha','mn',1)">▲</button>
-            <div class="spin-val" id="u_isha_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_isha','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_isha_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
-      </div>
+
+    <!-- Fajr -->
+    <div class="prayer-field">
+      <label>Fajr</label>
+      <div id="tp_u_fajr"></div>
+    </div>
+    <!-- Dhuhr -->
+    <div class="prayer-field">
+      <label>Dhuhr</label>
+      <div id="tp_u_dhuhr"></div>
+    </div>
+    <!-- Asr -->
+    <div class="prayer-field">
+      <label>Asr</label>
+      <div id="tp_u_asr"></div>
+    </div>
+    <!-- Maghrib -->
+    <div class="prayer-field">
+      <label>Maghrib</label>
+      <div class="auto-badge" id="maghribBadge" style="display:none">🌅 Auto-filled from today's sunset + 5 min</div>
+      <div id="tp_u_maghrib"></div>
+    </div>
+    <!-- Isha -->
+    <div class="prayer-field">
+      <label>Isha</label>
+      <div id="tp_u_isha"></div>
     </div>
 
     <div class="section-divider">Jumu'ah — Friday Prayer</div>
-    <div class="prayer-grid" style="grid-template-columns:1fr">
-      <div class="prayer-field full">
-        <label>Jumu'ah 1st</label>
-        <div class="time-picker" id="picker_u_jumma1">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_jumma1','hr',1)">▲</button>
-            <div class="spin-val" id="u_jumma1_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_jumma1','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_jumma1','mn',1)">▲</button>
-            <div class="spin-val" id="u_jumma1_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_jumma1','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_jumma1_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
+
+    <!-- Jumu'ah 1 -->
+    <div class="jumma-slot">
+      <label>Jumu'ah 1st Session</label>
+      <div class="jumma-row">
+        <select class="jumma-toggle" id="jt1" onchange="toggleJumma(1)">
+          <option value="no">No Jumu'ah</option>
+          <option value="yes">Set Time</option>
+        </select>
+        <div class="jumma-picker" id="jp1" style="display:none"><div id="tp_u_jumma1"></div></div>
       </div>
-      <div class="prayer-field full">
-        <label>Jumu'ah 2nd</label>
-        <div class="time-picker" id="picker_u_jumma2">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_jumma2','hr',1)">▲</button>
-            <div class="spin-val" id="u_jumma2_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_jumma2','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_jumma2','mn',1)">▲</button>
-            <div class="spin-val" id="u_jumma2_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_jumma2','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_jumma2_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
+    </div>
+    <!-- Jumu'ah 2 -->
+    <div class="jumma-slot">
+      <label>Jumu'ah 2nd Session</label>
+      <div class="jumma-row">
+        <select class="jumma-toggle" id="jt2" onchange="toggleJumma(2)">
+          <option value="no">No Jumu'ah</option>
+          <option value="yes">Set Time</option>
+        </select>
+        <div class="jumma-picker" id="jp2" style="display:none"><div id="tp_u_jumma2"></div></div>
       </div>
-      <div class="prayer-field full">
-        <label>Jumu'ah 3rd</label>
-        <div class="time-picker" id="picker_u_jumma3">
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_jumma3','hr',1)">▲</button>
-            <div class="spin-val" id="u_jumma3_hr">12</div>
-            <button class="spin-btn" onclick="spinTime('u_jumma3','hr',-1)">▼</button>
-          </div>
-          <div class="time-colon">:</div>
-          <div class="time-spin">
-            <button class="spin-btn" onclick="spinTime('u_jumma3','mn',1)">▲</button>
-            <div class="spin-val" id="u_jumma3_mn">00</div>
-            <button class="spin-btn" onclick="spinTime('u_jumma3','mn',-1)">▼</button>
-          </div>
-          <select class="ampm-select" id="u_jumma3_ap">
-            <option>AM</option>
-            <option>PM</option>
-          </select>
-        </div>
+    </div>
+    <!-- Jumu'ah 3 -->
+    <div class="jumma-slot">
+      <label>Jumu'ah 3rd Session</label>
+      <div class="jumma-row">
+        <select class="jumma-toggle" id="jt3" onchange="toggleJumma(3)">
+          <option value="no">No Jumu'ah</option>
+          <option value="yes">Set Time</option>
+        </select>
+        <div class="jumma-picker" id="jp3" style="display:none"><div id="tp_u_jumma3"></div></div>
       </div>
     </div>
 
-    <button class="submit-btn" onclick="updateTimes()">✅ Save Prayer Times</button>
+    <button class="submit-btn" id="saveBtn" onclick="updateTimes()">✅ Save Prayer Times</button>
   </div>
 
+  <!-- ADD MOSQUE TAB -->
   <div class="tab-content" id="tab-add">
     <div class="info-box">
       <strong>Adding a new mosque</strong>
-      Fill in details below. Prayer times can be added later through the Update Times tab.
+      Fill in details. Prayer times can be set later through the Update Times tab.
     </div>
-
     <div class="section-divider">Mosque Information</div>
     <div class="form-group">
       <label class="form-label">Mosque Name</label>
@@ -529,16 +253,17 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const ACCESS_CODE = '99';
+const ACCESS_CODE     = '99';
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOsYEdjLbKJLQBBxMS40K5fE8gjJBb1CdepQJt-jovtBkBG2Tfda-dEo3bGOJK6Rhonw/exec';
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSj8IV0YzG5jUnGKOdPs4lPPFpZq3w4I8WISNnsDl0iEAnMBe5qRB_JaGj5I90TZIOh_c5TtrTQccWN/pub?gid=2040643207&single=true&output=csv';
+const CSV_URL         = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSj8IV0YzG5jUnGKOdPs4lPPFpZq3w4I8WISNnsDl0iEAnMBe5qRB_JaGj5I90TZIOh_c5TtrTQccWN/pub?gid=2040643207&single=true&output=csv';
 
-document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
-
+// ── Lock ──
+document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key==='Enter') checkCode(); });
 function checkCode() {
   if (document.getElementById('codeInput').value.trim() === ACCESS_CODE) {
     document.getElementById('lockScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
+    buildAllPickers();
     loadMosques();
   } else {
     document.getElementById('lockError').style.display = 'block';
@@ -546,13 +271,145 @@ function checkCode() {
   }
 }
 
+// ── Tabs ──
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&tab==='update')||(i===1&&tab==='add')));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
 }
 
+// ── Time Picker ──
+const PICKERS = ['u_fajr','u_dhuhr','u_asr','u_maghrib','u_isha','u_jumma1','u_jumma2','u_jumma3'];
+
+function buildPicker(containerId, defaultHr=12, defaultMn='00', defaultAP='AM') {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = `
+    <div class="time-picker">
+      <div class="time-spin">
+        <button class="spin-btn" onclick="spin('${containerId}','hr',1)">▲</button>
+        <div class="spin-val" id="${containerId}_hr">${defaultHr}</div>
+        <button class="spin-btn" onclick="spin('${containerId}','hr',-1)">▼</button>
+      </div>
+      <div class="time-colon">:</div>
+      <div class="time-spin">
+        <button class="spin-btn" onclick="spin('${containerId}','mn',1)">▲</button>
+        <div class="spin-val" id="${containerId}_mn">${defaultMn}</div>
+        <button class="spin-btn" onclick="spin('${containerId}','mn',-1)">▼</button>
+      </div>
+      <select class="ampm-sel" id="${containerId}_ap">
+        <option${defaultAP==='AM'?' selected':''}>AM</option>
+        <option${defaultAP==='PM'?' selected':''}>PM</option>
+      </select>
+    </div>`;
+}
+
+function buildAllPickers() {
+  PICKERS.forEach(id => buildPicker('tp_'+id));
+}
+
+function spin(containerId, part, dir) {
+  if (part === 'hr') {
+    const el = document.getElementById(containerId+'_hr');
+    let v = parseInt(el.textContent) + dir;
+    if (v > 12) v = 1;
+    if (v < 1) v = 12;
+    el.textContent = v;
+  } else {
+    const el = document.getElementById(containerId+'_mn');
+    let v = parseInt(el.textContent) + dir * 5;
+    if (v >= 60) v = 0;
+    if (v < 0) v = 55;
+    el.textContent = String(v).padStart(2,'0');
+  }
+}
+
+function setTP(id, timeStr) {
+  if (!timeStr) return;
+  const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!m) return;
+  const hrEl = document.getElementById('tp_'+id+'_hr');
+  const mnEl = document.getElementById('tp_'+id+'_mn');
+  const apEl = document.getElementById('tp_'+id+'_ap');
+  if (hrEl) hrEl.textContent = parseInt(m[1]);
+  if (mnEl) mnEl.textContent = String(parseInt(m[2])).padStart(2,'0');
+  if (apEl) apEl.value = m[3].toUpperCase();
+}
+
+function getTP(id) {
+  const hr = document.getElementById('tp_'+id+'_hr');
+  const mn = document.getElementById('tp_'+id+'_mn');
+  const ap = document.getElementById('tp_'+id+'_ap');
+  if (!hr) return '';
+  return hr.textContent + ':' + mn.textContent + ' ' + ap.value;
+}
+
+// ── Jumu'ah toggle ──
+function toggleJumma(n) {
+  const val = document.getElementById('jt'+n).value;
+  const picker = document.getElementById('jp'+n);
+  picker.style.display = val === 'yes' ? 'block' : 'none';
+}
+
+function setJumma(n, timeStr) {
+  const toggle = document.getElementById('jt'+n);
+  const picker = document.getElementById('jp'+n);
+  if (timeStr && timeStr !== '—' && timeStr.trim() !== '') {
+    toggle.value = 'yes';
+    picker.style.display = 'block';
+    setTP('u_jumma'+n, timeStr);
+  } else {
+    toggle.value = 'no';
+    picker.style.display = 'none';
+  }
+}
+
+function getJumma(n) {
+  const toggle = document.getElementById('jt'+n);
+  if (toggle.value === 'no') return '';
+  return getTP('u_jumma'+n);
+}
+
+// ── Auto Maghrib from sunset ──
+async function fetchMaghrib(city) {
+  try {
+    const res  = await fetch(`https://api.sunrisesunset.io/json?lat=0&lng=0&formatted=0`);
+    // Use nominatim to get lat/lng for city
+    const geo  = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city+', Saskatchewan, Canada')}&format=json&limit=1`);
+    const geoJ = await geo.json();
+    if (!geoJ.length) return;
+    const {lat, lon} = geoJ[0];
+    const sun  = await fetch(`https://api.sunrisesunset.io/json?lat=${lat}&lng=${lon}&formatted=0`);
+    const sunJ = await sun.json();
+    if (sunJ.status !== 'OK') return;
+
+    // Parse sunset and add 5 minutes
+    const sunset = sunJ.results.sunset; // e.g. "8:15:42 PM"
+    const m = sunset.match(/(\d+):(\d+):\d+\s*(AM|PM)/i);
+    if (!m) return;
+
+    let hr = parseInt(m[1]);
+    let mn = parseInt(m[2]) + 5;
+    let ap = m[3].toUpperCase();
+    if (mn >= 60) { mn -= 60; hr++; }
+    if (hr > 12) { hr -= 12; ap = ap === 'AM' ? 'PM' : 'AM'; }
+
+    // Set Maghrib picker
+    const hrEl = document.getElementById('tp_u_maghrib_hr');
+    const mnEl = document.getElementById('tp_u_maghrib_mn');
+    const apEl = document.getElementById('tp_u_maghrib_ap');
+    if (hrEl) hrEl.textContent = hr;
+    if (mnEl) mnEl.textContent = String(mn).padStart(2,'0');
+    if (apEl) apEl.value = ap;
+    document.getElementById('maghribBadge').style.display = 'inline-flex';
+  } catch(e) {
+    console.log('Sunset fetch failed:', e);
+  }
+}
+
+// ── Load mosques ──
 let mosqueData = [];
+
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim().toLowerCase().replace(/\s+/g,'_'));
@@ -583,122 +440,88 @@ async function loadMosques() {
 function mosqueSelected() {
   const idx = document.getElementById('updateMosqueSelect').value;
   const loaded = document.getElementById('mosqueLoaded');
-  if(!idx){loaded.style.display='none';return;}
+  document.getElementById('maghribBadge').style.display = 'none';
+  if (!idx) { loaded.style.display='none'; return; }
   const r = mosqueData[parseInt(idx)];
   document.getElementById('loadedName').textContent = r.mosque_name||r.name;
   document.getElementById('loadedSub').textContent = `${r.city} · ${r.address}`;
-  setTimePicker('u_fajr',    r.fajr||'');
-  setTimePicker('u_dhuhr',   r.dhuhr||'');
-  setTimePicker('u_asr',     r.asr||'');
-  setTimePicker('u_maghrib', r.maghrib||'');
-  setTimePicker('u_isha',    r.isha||'');
-  setTimePicker('u_jumma1',  r.jumma1||r.jumma||r.jummah||'');
-  setTimePicker('u_jumma2',  r.jumma2||'');
-  setTimePicker('u_jumma3',  r.jumma3||'');
-  loaded.style.display='flex';
+  loaded.style.display = 'flex';
+
+  // Fill daily times
+  setTP('u_fajr',    r.fajr);
+  setTP('u_dhuhr',   r.dhuhr);
+  setTP('u_asr',     r.asr);
+  setTP('u_isha',    r.isha);
+
+  // Maghrib: use stored value then fetch sunset
+  if (r.maghrib) setTP('u_maghrib', r.maghrib);
+  fetchMaghrib(r.city);
+
+  // Jumu'ah
+  setJumma(1, r.jumma1||r.jumma||'');
+  setJumma(2, r.jumma2||'');
+  setJumma(3, r.jumma3||'');
 }
 
+// ── Update times ──
 async function updateTimes() {
   const idx = document.getElementById('updateMosqueSelect').value;
-  if(!idx){showToast('Please select a mosque first',true);return;}
+  if (!idx) { showToast('Please select a mosque first', true); return; }
   const r = mosqueData[parseInt(idx)];
   const data = {
-    action:'update', mosque: r.mosque_name||r.name,
-    fajr:    getTimePicker('u_fajr'),
-    dhuhr:   getTimePicker('u_dhuhr'),
-    asr:     getTimePicker('u_asr'),
-    maghrib: getTimePicker('u_maghrib'),
-    isha:    getTimePicker('u_isha'),
-    jumma1:  getTimePicker('u_jumma1'),
-    jumma2:  getTimePicker('u_jumma2'),
-    jumma3:  getTimePicker('u_jumma3'),
+    action:  'update',
+    mosque:  r.mosque_name||r.name,
+    fajr:    getTP('u_fajr'),
+    dhuhr:   getTP('u_dhuhr'),
+    asr:     getTP('u_asr'),
+    maghrib: getTP('u_maghrib'),
+    isha:    getTP('u_isha'),
+    jumma1:  getJumma(1),
+    jumma2:  getJumma(2),
+    jumma3:  getJumma(3),
   };
-  const btn = document.querySelector('#tab-update .submit-btn');
+  const btn = document.getElementById('saveBtn');
   btn.disabled=true; btn.textContent='Saving...';
   try {
-    fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(data)});
+    fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', body:JSON.stringify(data) });
     showToast('✅ Prayer times saved!');
-    setTimeout(loadMosques,2000);
-  } catch(e){showToast('Error saving. Try again.',true);}
+    setTimeout(loadMosques, 3000);
+  } catch(e) { showToast('Error saving. Try again.', true); }
   btn.disabled=false; btn.textContent='✅ Save Prayer Times';
 }
 
-function normalize(str) {
-  return (str||'').toLowerCase().replace(/[\s\.\-\_]/g,'');
-}
-
-// ── Time Picker Helpers ──
-function spinTime(id, part, dir) {
-  if (part === 'hr') {
-    const el = document.getElementById(id+'_hr');
-    let v = parseInt(el.textContent);
-    v += dir;
-    if (v > 12) v = 1;
-    if (v < 1) v = 12;
-    el.textContent = v;
-  } else {
-    const el = document.getElementById(id+'_mn');
-    let v = parseInt(el.textContent);
-    v += dir * 5;
-    if (v >= 60) v = 0;
-    if (v < 0) v = 55;
-    el.textContent = String(v).padStart(2,'0');
-  }
-}
-
-function setTimePicker(id, timeStr) {
-  if (!timeStr || timeStr === '—') return;
-  const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-  if (!m) return;
-  document.getElementById(id+'_hr').textContent = parseInt(m[1]);
-  document.getElementById(id+'_mn').textContent = String(parseInt(m[2])).padStart(2,'0');
-  const ap = document.getElementById(id+'_ap');
-  ap.value = m[3].toUpperCase();
-}
-
-function getTimePicker(id) {
-  const hr = document.getElementById(id+'_hr').textContent;
-  const mn = document.getElementById(id+'_mn').textContent;
-  const ap = document.getElementById(id+'_ap').value;
-  return hr + ':' + mn + ' ' + ap;
-}
+// ── Add mosque ──
+function normalize(s){ return (s||'').toLowerCase().replace(/[\s.\-_]/g,''); }
 
 async function addMosque() {
-  const name=document.getElementById('a_name').value.trim();
-  const city=document.getElementById('a_city').value.trim();
-  const address=document.getElementById('a_address').value.trim();
-  const door=document.getElementById('a_door').value.trim();
-  if(!name||!city||!address||!door){showToast('Please fill in all fields',true);return;}
+  const name    = document.getElementById('a_name').value.trim();
+  const city    = document.getElementById('a_city').value.trim();
+  const address = document.getElementById('a_address').value.trim();
+  const door    = document.getElementById('a_door').value.trim();
+  if (!name||!city||!address||!door) { showToast('Please fill in all fields', true); return; }
 
-  // Check for duplicates client-side
-  const newNorm = normalize(name);
-  const match = mosqueData.find(r => normalize(r.mosque_name||r.name) === newNorm);
-  if (match) {
-    showToast('⚠️ Already exists: ' + (match.mosque_name||match.name), true);
-    return;
-  }
+  // Duplicate check client-side
+  const match = mosqueData.find(r => normalize(r.mosque_name||r.name) === normalize(name));
+  if (match) { showToast('⚠️ Already exists: '+(match.mosque_name||match.name), true); return; }
 
-  const btn=document.querySelector('#tab-add .submit-btn');
+  const btn = document.querySelector('#tab-add .submit-btn');
   btn.disabled=true; btn.textContent='Adding...';
   try {
-    fetch(APPS_SCRIPT_URL, {
-      method:'POST',
-      mode:'no-cors',
-      body:JSON.stringify({action:'add',mosque:name,city,address,door})
-    });
-    showToast('🕌 Mosque added! Refresh in 1 min to see it.');
+    fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', body:JSON.stringify({action:'add',mosque:name,city,address,door}) });
+    showToast('🕌 Mosque added! Appears in ~1 min.');
     ['a_name','a_city','a_address','a_door'].forEach(id=>document.getElementById(id).value='');
     setTimeout(loadMosques, 3000);
-  } catch(e){showToast('Error adding. Try again.',true);}
+  } catch(e) { showToast('Error adding. Try again.', true); }
   btn.disabled=false; btn.textContent='🕌 Add Mosque';
 }
 
-function showToast(msg,isError=false) {
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast'+(isError?' error':'');
-  setTimeout(()=>t.classList.add('show'),10);
-  setTimeout(()=>t.classList.remove('show'),3200);
+// ── Toast ──
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast'+(isError?' error':'');
+  setTimeout(()=>t.classList.add('show'), 10);
+  setTimeout(()=>t.classList.remove('show'), 3500);
 }
 </script>
 </body>
