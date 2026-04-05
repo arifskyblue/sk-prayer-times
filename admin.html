@@ -266,7 +266,9 @@
 
     <div class="section-divider">Jumu'ah — Friday Prayer</div>
     <div class="prayer-grid">
-      <div class="prayer-field full"><label>Jumu'ah Time</label><input type="text" id="u_jumma" placeholder="e.g. 1:30 PM"></div>
+      <div class="prayer-field full"><label>Jumu'ah 1st</label><input type="text" id="u_jumma1" placeholder="e.g. 12:00 PM"></div>
+      <div class="prayer-field full"><label>Jumu'ah 2nd</label><input type="text" id="u_jumma2" placeholder="e.g. 1:00 PM"></div>
+      <div class="prayer-field full"><label>Jumu'ah 3rd</label><input type="text" id="u_jumma3" placeholder="e.g. 2:00 PM"></div>
     </div>
 
     <button class="submit-btn" onclick="updateTimes()">✅ Save Prayer Times</button>
@@ -365,7 +367,9 @@ function mosqueSelected() {
   document.getElementById('u_asr').value     = r.asr||'';
   document.getElementById('u_maghrib').value = r.maghrib||'';
   document.getElementById('u_isha').value    = r.isha||'';
-  document.getElementById('u_jumma').value   = r.jumma||r.jummah||r.jumuah||'';
+  document.getElementById('u_jumma1').value  = r.jumma1||r.jumma||r.jummah||'';
+  document.getElementById('u_jumma2').value  = r.jumma2||'';
+  document.getElementById('u_jumma3').value  = r.jumma3||'';
   loaded.style.display='flex';
 }
 
@@ -380,7 +384,9 @@ async function updateTimes() {
     asr:     document.getElementById('u_asr').value.trim(),
     maghrib: document.getElementById('u_maghrib').value.trim(),
     isha:    document.getElementById('u_isha').value.trim(),
-    jumma:   document.getElementById('u_jumma').value.trim(),
+    jumma1:  document.getElementById('u_jumma1').value.trim(),
+    jumma2:  document.getElementById('u_jumma2').value.trim(),
+    jumma3:  document.getElementById('u_jumma3').value.trim(),
   };
   if(!data.fajr||!data.dhuhr||!data.asr||!data.maghrib||!data.isha){showToast('Please fill in all prayer times',true);return;}
   const btn = document.querySelector('#tab-update .submit-btn');
