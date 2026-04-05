@@ -392,11 +392,15 @@ async function updateTimes() {
   const btn = document.querySelector('#tab-update .submit-btn');
   btn.disabled=true; btn.textContent='Saving...';
   try {
-    await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify(data)});
+    fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(data)});
     showToast('✅ Prayer times saved!');
     setTimeout(loadMosques,2000);
   } catch(e){showToast('Error saving. Try again.',true);}
   btn.disabled=false; btn.textContent='✅ Save Prayer Times';
+}
+
+function normalize(str) {
+  return (str||'').toLowerCase().replace(/[\s\.\-\_]/g,'');
 }
 
 async function addMosque() {
@@ -405,18 +409,26 @@ async function addMosque() {
   const address=document.getElementById('a_address').value.trim();
   const door=document.getElementById('a_door').value.trim();
   if(!name||!city||!address||!door){showToast('Please fill in all fields',true);return;}
+
+  // Check for duplicates client-side
+  const newNorm = normalize(name);
+  const match = mosqueData.find(r => normalize(r.mosque_name||r.name) === newNorm);
+  if (match) {
+    showToast('⚠️ Already exists: ' + (match.mosque_name||match.name), true);
+    return;
+  }
+
   const btn=document.querySelector('#tab-add .submit-btn');
   btn.disabled=true; btn.textContent='Adding...';
   try {
-    const res = await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'add',mosque:name,city,address,door})});
-    const result = await res.json();
-    if (result.status === 'duplicate') {
-      showToast('⚠️ Already exists: ' + result.existing, true);
-    } else {
-      showToast('🕌 Mosque added!');
-      ['a_name','a_city','a_address','a_door'].forEach(id=>document.getElementById(id).value='');
-      setTimeout(loadMosques,2000);
-    }
+    fetch(APPS_SCRIPT_URL, {
+      method:'POST',
+      mode:'no-cors',
+      body:JSON.stringify({action:'add',mosque:name,city,address,door})
+    });
+    showToast('🕌 Mosque added! Refresh in 1 min to see it.');
+    ['a_name','a_city','a_address','a_door'].forEach(id=>document.getElementById(id).value='');
+    setTimeout(loadMosques, 3000);
   } catch(e){showToast('Error adding. Try again.',true);}
   btn.disabled=false; btn.textContent='🕌 Add Mosque';
 }
