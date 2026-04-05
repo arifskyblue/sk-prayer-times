@@ -379,6 +379,13 @@
     font-size: 14px;
     line-height: 1.7;
   }
+  .maps-link {
+    color: var(--em-light);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(52,211,153,0.3);
+    transition: color 0.2s;
+  }
+  .maps-link:hover { color: var(--em); }
   .placeholder-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
 </style>
 </head>
@@ -412,7 +419,7 @@
 <div id="mosqueCard" class="mosque-card" style="display:none"></div>
 
 <div class="volunteer-footer">
-  <a class="volunteer-btn" href="admin.html">
+  <a class="volunteer-btn" href="https://arifskyblue.github.io/sk-prayer-times/admin.html">
     <span>🙋</span> Volunteer? Update prayer times here · Code: 99
   </a>
 </div>
@@ -508,7 +515,7 @@ function renderCard(row) {
       <div class="info-row">
         <div class="info-icon">📍</div>
         <div>
-          <div class="info-text-label">Address</div>
+          <div class="info-text-label">Address — tap to open maps</div>
           <div class="info-text-value">${row.address || '—'}</div>
         </div>
       </div>
