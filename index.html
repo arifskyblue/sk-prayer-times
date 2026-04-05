@@ -435,6 +435,20 @@
 <script>
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSj8IV0YzG5jUnGKOdPs4lPPFpZq3w4I8WISNnsDl0iEAnMBe5qRB_JaGj5I90TZIOh_c5TtrTQccWN/pub?gid=2040643207&single=true&output=csv';
 
+
+function to12hr(str) {
+  if (!str || str === '—') return str || '—';
+  // Already has AM/PM
+  if (/am|pm/i.test(str)) return str.trim();
+  // Convert 24hr to 12hr
+  const m = str.match(/^(\d{1,2}):(\d{2})/);
+  if (!m) return str;
+  let hr = parseInt(m[1]), mn = m[2];
+  const ap = hr >= 12 ? 'PM' : 'AM';
+  if (hr > 12) hr -= 12;
+  if (hr === 0) hr = 12;
+  return hr + ':' + mn + ' ' + ap;
+}
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim().toLowerCase().replace(/\s+/g,'_'));
@@ -487,7 +501,7 @@ function renderCard(row) {
   const prayerRows = prayers.map(p => `
     <div class="prayer-row${active === p.key ? ' active' : ''}">
       <span class="p-name">${p.label}${active === p.key ? ' ✦' : ''}</span>
-      <span class="p-time">${row[p.key] || '—'}</span>
+      <span class="p-time">${to12hr(row[p.key])}</span>
     </div>`).join('');
 
   // jumma slots handled inline
@@ -511,9 +525,9 @@ function renderCard(row) {
       <div class="col-jumma">
         <div class="col-title">Jumu'ah</div>
         <div class="jumma-day">Every Friday</div>
-        <div class="jumma-slot"><span class="jumma-num">1st</span><span class="jumma-t">${row.jumma1||row.jumma||'—'}</span></div>
-        <div class="jumma-slot"><span class="jumma-num">2nd</span><span class="jumma-t">${row.jumma2||'—'}</span></div>
-        <div class="jumma-slot"><span class="jumma-num">3rd</span><span class="jumma-t">${row.jumma3||'—'}</span></div>
+        <div class="jumma-slot"><span class="jumma-num">1st</span><span class="jumma-t">${to12hr(row.jumma1||row.jumma)}</span></div>
+        <div class="jumma-slot"><span class="jumma-num">2nd</span><span class="jumma-t">${to12hr(row.jumma2)}</span></div>
+        <div class="jumma-slot"><span class="jumma-num">3rd</span><span class="jumma-t">${to12hr(row.jumma3)}</span></div>
         <div class="jumma-note">
           🕌 Please arrive early.<br>Khutbah begins before Salah.
         </div>
