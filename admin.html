@@ -305,7 +305,7 @@
 
 <script>
 const ACCESS_CODE = '99';
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOsYEdjLbKJLQBBxMS40K5fE8gjJBb1CdepQJt-jovtBkBG2Tfda-dEo3bGOJK6Rhonw/exec';
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSj8IV0YzG5jUnGKOdPs4lPPFpZq3w4I8WISNnsDl0iEAnMBe5qRB_JaGj5I90TZIOh_c5TtrTQccWN/pub?gid=2040643207&single=true&output=csv';
 
 document.getElementById('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
@@ -408,10 +408,15 @@ async function addMosque() {
   const btn=document.querySelector('#tab-add .submit-btn');
   btn.disabled=true; btn.textContent='Adding...';
   try {
-    await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'add',mosque:name,city,address,door})});
-    showToast('🕌 Mosque added!');
-    ['a_name','a_city','a_address','a_door'].forEach(id=>document.getElementById(id).value='');
-    setTimeout(loadMosques,2000);
+    const res = await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'add',mosque:name,city,address,door})});
+    const result = await res.json();
+    if (result.status === 'duplicate') {
+      showToast('⚠️ Already exists: ' + result.existing, true);
+    } else {
+      showToast('🕌 Mosque added!');
+      ['a_name','a_city','a_address','a_door'].forEach(id=>document.getElementById(id).value='');
+      setTimeout(loadMosques,2000);
+    }
   } catch(e){showToast('Error adding. Try again.',true);}
   btn.disabled=false; btn.textContent='🕌 Add Mosque';
 }
