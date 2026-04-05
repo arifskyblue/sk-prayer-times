@@ -553,8 +553,60 @@ function renderCard(row) {
 
   document.getElementById('mosqueCard').style.display = 'block';
   document.getElementById('placeholder').style.display = 'none';
+
+  // Auto-fetch Maghrib from sunset
+  if (row.city) {
+    fetchMaghrib(row.city).then(maghrib => {
+      if (!maghrib) return;
+      // Update the Maghrib time display in the card
+      const items = document.querySelectorAll('.prayer-row');
+      items.forEach(item => {
+        const name = item.querySelector('.p-name');
+        const time = item.querySelector('.p-time');
+        if (name && name.textContent.replace(' ✦','').trim() === 'Maghrib') {
+          time.textContent = maghrib;
+          // Add auto badge
+          const badge = document.createElement('span');
+          badge.style.cssText = 'font-size:10px;color:var(--gold);margin-left:6px;opacity:0.8;';
+          badge.textContent = '🌅 auto';
+          name.appendChild(badge);
+        }
+      });
+    });
+  }
 }
 
+
+// ── Auto Maghrib from sunset ──
+async function fetchMaghrib(city) {
+  try {
+    const geo = await fetch(
+      'https://nominatim.openstreetmap.org/search?q='
+      + encodeURIComponent(city + ', Saskatchewan, Canada')
+      + '&format=json&limit=1'
+    );
+    const geoJ = await geo.json();
+    if (!geoJ.length) return null;
+    const {lat, lon} = geoJ[0];
+    const sun  = await fetch(
+      'https://api.sunrisesunset.io/json?lat=' + lat + '&lng=' + lon + '&formatted=0'
+    );
+    const sunJ = await sun.json();
+    if (sunJ.status !== 'OK') return null;
+
+    const sunset = sunJ.results.sunset;
+    const m = sunset.match(/(\d+):(\d+):\d+\s*(AM|PM)/i);
+    if (!m) return null;
+
+    let hr = parseInt(m[1]), mn = parseInt(m[2]) + 5;
+    let ap = m[3].toUpperCase();
+    if (mn >= 60) { mn -= 60; hr++; }
+    if (hr > 12) { hr -= 12; }
+    return hr + ':' + String(mn).padStart(2,'0') + ' ' + ap;
+  } catch(e) {
+    return null;
+  }
+}
 async function init() {
   const status = document.getElementById('statusArea');
   const sel = document.getElementById('mosqueSelect');
